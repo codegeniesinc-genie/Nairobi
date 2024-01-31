@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'events.css' %}">
+<div class="events">
+    {% for event in events %}
+    <div class="card"">
+        <img src="{{ event.image.url }}" class="card-img-top" style="height: 200px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ event.title }}</h5>
+            <p class="events-info">{{ event.county }} | {{ event.location }}</p>
+            <p class="events-info">{{ event.date }} | {{ event.time }}</p>
+            <p class="events-info">{{ event.contact_email }}</p>
+            <div class="btn">
+                <button type="button" class="bttn" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                    {{ event.price }} KES
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

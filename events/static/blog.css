@@ -1,0 +1,505 @@
+/* Common Styles */
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-family: Poppins;
+  background-color: #fff;
+  color: #333;
+}
+
+.hero {
+  text-align: center;
+  padding: 100px 0;
+}
+
+.hero-title {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  margin-top: 25px;
+}
+
+.hero-title .strong {
+  color: #333;
+  font-weight: bolder;
+}
+
+.subscribe-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.email-field {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: black;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.subscribe-text {
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.link {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.link a {
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+} 
+
+.link:hover {
+  background-color: #007bff;
+}
+/* Latest Blogs Section Styles */
+.latest-blogs {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.section-subtitle {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.latest-blogs-card {
+  margin-bottom: 40px;
+  border-radius: 10px;
+}
+
+.latest-blogs-banner {
+  overflow: hidden;
+  margin: 0;
+  padding: 5px;
+}
+
+.latest-blogs-banner img {
+  width: 100%;
+  height: 200px;
+  /* Adjust this height as needed */
+  object-fit: cover;
+  /* or object-fit: contain; depending on your preference */
+  display: block;
+}
+
+.latest-blogs-card-content {
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.latest-blogs-category-tag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.latest-blogs-category-card-tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.latest-blogs-category-card-tag:hover {
+  background-color: #0056b3;
+}
+
+.latest-blogs-title {
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.latest-blogs-text {
+  text-align: justify;
+  color: #666;
+}
+
+/* Upcoming Events Section Styles */
+.upcoming_events {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.upcoming_events_card {
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.upcoming_events_banner {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.upcoming_events_banner img {
+  width: 100%;
+  height: 200px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.upcoming_events_banner:hover img {
+  transform: scale(1.05);
+}
+
+.upcoming_events_card_content {
+  padding: 20px;
+}
+
+.upcoming_events_category_tag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.upcoming_events_category_card_tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.upcoming_events_category_card_tag:hover {
+  background-color: #0056b3;
+}
+
+.upcoming_events_title {
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.upcoming_events_title:hover {
+  color: #007bff;
+}
+
+.upcoming_events_text {
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Tech In Entertainment Section Styles */
+.tech_entertainment {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.tech_entertainment_card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.tech_entertainment_card:hover {
+  transform: translateY(-5px);
+}
+
+.tech_entertainment_banner {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.tech_entertainment_banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.tech_entertainment_banner:hover img {
+  transform: scale(1.05);
+}
+
+.tech_entertainment_content {
+  padding: 20px;
+}
+
+.tech_entertainment_tag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tech_entertainment_category_card_tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.tech_entertainment_category_card_tag:hover {
+  background-color: #0056b3;
+}
+
+.tech_entertainment_title {
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.tech_entertainment_title:hover {
+  color: #007bff;
+}
+
+.tech_entertainment_text {
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Past Event Reviews Section Styles */
+.Past_Event_Reviews {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.Past_Event_Reviews_card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.Past_Event_Reviews_card:hover {
+  transform: translateY(-5px);
+}
+
+.Past_Event_Reviews_banner {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.Past_Event_Reviews_banner img {
+  width: 100%;
+  height: 200px;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.Past_Event_Reviews_banner:hover img {
+  transform: scale(1.05);
+}
+
+.Past_Event_Reviews_content {
+  padding: 20px;
+}
+
+.Past_Event_Reviews_tag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Past_Event_Reviews_card_tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.Past_Event_Reviews_card_tag:hover {
+  background-color: #0056b3;
+}
+
+.Past_Event_Reviews_title {
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.Past_Event_Reviews_title:hover {
+  color: #007bff;
+}
+
+.Past_Event_Reviews_text {
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Artists' Corner Section Styles */
+.artists_corner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  text-align: justify;
+}
+
+.artists_corner-card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.artists_corner-banner {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.artists_corner-banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.artists_corner-banner:hover img {
+  transform: scale(1.05);
+}
+
+.artists_corner-card-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.artists_corner-category-tag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.artists_corner-category-card-tag {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 50px;
+  text-decoration: none;
+}
+
+.artists_corner-category-card-tag:hover {
+  background-color: #0056b3;
+}
+
+.artists_corner-title {
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.artists_corner-title:hover {
+  color: #007bff;
+}
+
+.artists_corner-text {
+  color: #666;
+  text-align: justify;
+  line-height: 1.4;
+}
+
+
+/* Grid Layout for Large Screens */
+@media only screen and (min-width: 768px) {
+  .latest-blogs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 20px;
+  }
+}
+
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+  .hero-title {
+    font-size: 2em;
+  }
+
+  .email-field {
+    width: calc(100% - 20px);
+    margin-right: 0;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .hero-title {
+    font-size: 1.5em;
+  }
+}

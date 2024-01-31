@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'singlePost.css' %}">
+<div class="container">
+    <div class="main-content">
+        <article class="blog-post">
+            <h1>{{ blog.title }}</h1>
+            <p class="blog-meta">Posted by {{ blog.author }} in {{ blog.category }} on {{ blog.pub_date }}</p>
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="blog-image">
+            <p class="blog-content">{{ blog.content }}</p>
+            <div class="share-button">
+                <button class="share-btn">Share</button>
+            </div>
+        </article>
+        <div class="pagination">
+            <div class="paginationprev">
+            {% if prev_post %}
+            <a href="{% url 'events:single_post' prev_post.id %}" class="prev-post">Previous Post</a>
+            {% endif %}
+            </div>
+            <div class="paginationnext">
+            {% if next_post %}
+            <a href="{% url 'events:single_post' next_post.id %}" class="next-post">Next Post</a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        
+
+        <div class="related-posts">
+            <h2>Related Posts</h2>
+            {% for related_post in blog.get_related_posts %}
+                <div class="related-post-item">
+                    <h3><a href="{% url 'events:single_post' related_post.id %}">{{ forloop.counter }}| {{ related_post.title }}</a></h3>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="recent-posts">
+            <h2>Recent Posts</h2>
+            {% include 'blog_section.html' with blogs=latest_blogs %}
+        </div>
+    </div>
+</div>
+{% endblock %}

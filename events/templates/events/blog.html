@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'blog.css' %}">
+<script src="{% static 'blog.js' %}"></script>
+
+<div class="container">
+    <h1 class="hero-title">
+        Hey, we’re <strong class="strong">Live from Nairobi.</strong>See our thoughts, stories and
+        ideas.
+    </h1>
+
+    <div class="subscribe">
+        <form action="" class="subscribe-form">
+            <input type="email" name="email_address" placeholder="Your email address" class="email-field">
+            <button type="submit" class="btn">Subscribe</button>
+        </form>
+        <p class="subscribe-text">
+            Get the email newsletter and unlock access to members-only content and updates
+        </p>
+    </div>
+
+    <p class="section-subtitle">
+        Get started with our <strong class="strong">latest stories</strong>
+    </p>
+    <div class="latest-blogs">
+        {% for blog in latest_blogs %}
+        <div class="latest-blogs-card">
+            <figure class="latest-blogs-banner">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
+            </figure>
+            <div class="latest-blogs-card-content">
+                <ul class="latest-blogs-category-tag">
+                    <li>
+                        <a href="#" class="latest-blogs-category-card-tag">{{ blog.category }}</a>
+                    </li>
+                </ul>
+                <h3 class="h4">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        {{ blog.title }}
+                    </a>
+                </h3>
+                <p class="latest-blogs-text">
+                    {{ blog.short_description }}
+                </p>
+                <button class="link">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        Read More
+                    </a>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="section-subtitle">
+        <strong class="strong">Upcoming Events Review</strong>
+    </p>
+    <div class="upcoming_events">
+        {% for blog in upcoming_events %}
+        <div class="upcoming_events_card">
+            <figure class="upcoming_events_banner">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
+            </figure>
+            <div class="upcoming_events_card_content">
+                <ul class="upcoming_events_category_tag">
+                    <li>
+                        <a href="#" class="upcoming_events_category_card_tag">{{ blog.category }}</a>
+                    </li>
+                </ul>
+                <h3 class="h4">
+                    <a href="{% url 'events:single_post' blog.id %}"" class="upcoming_events_title">
+                        {{ blog.title }}
+                    </a>
+                </h3>
+                <p class="upcoming_events_text">
+                    {{ blog.short_description }}
+                </p>
+                <button class="link">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        Read More
+                    </a>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="section-subtitle">
+        <strong class="strong">Tech In Entertainment</strong>
+    </p>
+    <div class="tech_entertainment">
+        {% for blog in tech_entertainment %}
+        <div class="tech_entertainment_card">
+            <figure class="tech_entertainment_banner">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
+            </figure>
+            <div class="tech_entertainment_content">
+                <ul class="tech_entertainment_tag">
+                    <li>
+                        <a href="#" class="tech_entertainment_category_card_tag">{{ blog.category }}</a>
+                    </li>
+                </ul>
+                <h3 class="h4">
+                    <a href="{% url 'events:single_post' blog.id %}" class="tech_entertainment_title">
+                        {{ blog.title }}
+                    </a>
+                </h3>
+                <p class="tech_entertainment_text">
+                    {{ blog.short_description }}
+                </p>
+                <button class="link">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        Read More
+                    </a>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="section-subtitle">
+        <strong class="strong">Event Review</strong>
+    </p>
+    <div class="Past_Event_Reviews">
+        {% for blog in past_event_reviews %}
+        <div class="Past_Event_Reviews_card">
+            <figure class="Past_Event_Reviews_banner">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
+            </figure>
+            <div class="Past_Event_Reviews_content">
+                <ul class="Past_Event_Reviews_tag">
+                    <li>
+                        <a href="#" class="Past_Event_Reviews_card_tag">{{ blog.category }}</a>
+                    </li>
+                </ul>
+                <h3 class="h4">
+                    <a href="{% url 'events:single_post' blog.id %}" class="Past_Event_Reviews_title">
+                        {{ blog.title }}
+                    </a>
+                </h3>
+                <p class="Past_Event_Reviews_text">
+                    {{ blog.short_description }}
+                </p>
+                <button class="link">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        Read More
+                    </a>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="section-subtitle">
+        <strong class="strong">Artists' Corner</strong>
+    </p>
+    <div class="artists_corner">
+        {% for blog in artists_corner %}
+        <div class="artists_corner-card">
+            <figure class="artists_corner-banner">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
+            </figure>
+            <div class="artists_corner-card-content">
+                <ul class="artists_corner-category-tag">
+                    <li>
+                        <a href="#" class="artists_corner-category-card-tag">{{ blog.category }}</a>
+                    </li>
+                </ul>
+                <h3 class="h4">
+                    <a href="{% url 'events:single_post' blog.id %}" class="artists_corner-title">
+                        {{ blog.title }}
+                    </a>
+                </h3>
+                <p class="artists_corner-text">
+                    {{ blog.short_description }}
+                </p>
+                <button class="link">
+                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                        Read More
+                    </a>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
