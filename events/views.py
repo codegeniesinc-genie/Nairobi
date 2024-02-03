@@ -1,7 +1,30 @@
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.shortcuts import render, get_object_or_404
 from .models import Event,Blog
+from django.http import JsonResponse
 
+class LoadMorePostsView(View):
+    def get(self, request):
+        category = request.GET.get('category')
+        page = int(request.GET.get('page', 1))
+        per_page = 5
+        start_index = (page - 1) * per_page
+        end_index = start_index + per_page
+
+        # Assuming BlogPost model has fields like image, title, category, short_description, etc.
+        posts = Blog.objects.filter(category=category)[start_index:end_index]
+
+        data = []
+        for post in posts:
+            data.append({
+                'image': post.image.url,
+                'title': post.title,
+                'url': post.get_absolute_url(),  # Assuming you have a method to get the post URL
+                'category': post.category,
+                'short_description': post.short_description
+            })
+
+        return JsonResponse(data, safe=False)
 
 class HomePageView(TemplateView):
     template_name = 'events/homepage.html'
@@ -16,7 +39,7 @@ class DashBoardView(TemplateView):
 class EventsPageView(TemplateView):
     template_name = 'events/events.html'
     def get_context_data(self, **kwargs):
-        events = Event.objects.filter(is_published=True)
+        events = Event.objects.filter(is_published=True).order_by('-pub_date')
         context = {'events': events}
         return context
 
@@ -37,11 +60,11 @@ class BlogPageView(TemplateView):
 
         all_blogs = Blog.objects.all()
 
-        context['latest_blogs'] = all_blogs.filter(category='latest')
-        context['upcoming_events'] = all_blogs.filter(category='upcoming')
-        context['tech_entertainment'] = all_blogs.filter(category='tech')
-        context['past_event_reviews'] = all_blogs.filter(category='reviews')
-        context['artists_corner'] = all_blogs.filter(category='artists')
+        context['latest_blogs'] = all_blogs.filter(category='latest').order_by('-pub_date')
+        context['upcoming_events'] = all_blogs.filter(category='upcoming').order_by('-pub_date')
+        context['tech_entertainment'] = all_blogs.filter(category='tech').order_by('-pub_date')
+        context['past_event_reviews'] = all_blogs.filter(category='reviews').order_by('-pub_date')
+        context['artists_corner'] = all_blogs.filter(category='artists').order_by('-pub_date')
 
         return context    
 

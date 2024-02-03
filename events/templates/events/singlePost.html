@@ -33,7 +33,7 @@
 
         <div class="related-posts">
             <h2>Related Posts</h2>
-            {% for related_post in blog.get_related_posts %}
+            {% for related_post in blog.get_related_posts|slice:":5" %}
                 <div class="related-post-item">
                     <h3><a href="{% url 'events:single_post' related_post.id %}">{{ forloop.counter }}| {{ related_post.title }}</a></h3>
                 </div>

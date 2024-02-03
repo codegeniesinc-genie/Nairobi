@@ -22,11 +22,12 @@
         </p>
     </div>
 
+
     <p class="section-subtitle">
         Get started with our <strong class="strong">latest stories</strong>
     </p>
-    <div class="latest-blogs">
-        {% for blog in latest_blogs %}
+    <div class="latest-blogs" id="latest-blogs-container">
+        {% for blog in latest_blogs|slice:":6" %}
         <div class="latest-blogs-card">
             <figure class="latest-blogs-banner">
                 <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
@@ -45,21 +46,19 @@
                 <p class="latest-blogs-text">
                     {{ blog.short_description }}
                 </p>
-                <button class="link">
-                    <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
-                        Read More
-                    </a>
+                <button class="read-more-btn link" data-category="{{ blog.category }}">
+                    Read More
                 </button>
             </div>
         </div>
         {% endfor %}
     </div>
-
+    
     <p class="section-subtitle">
         <strong class="strong">Upcoming Events Review</strong>
     </p>
     <div class="upcoming_events">
-        {% for blog in upcoming_events %}
+        {% for blog in upcoming_events|slice:":6" %}
         <div class="upcoming_events_card">
             <figure class="upcoming_events_banner">
                 <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
@@ -92,7 +91,7 @@
         <strong class="strong">Tech In Entertainment</strong>
     </p>
     <div class="tech_entertainment">
-        {% for blog in tech_entertainment %}
+        {% for blog in tech_entertainment|slice:":6" %}
         <div class="tech_entertainment_card">
             <figure class="tech_entertainment_banner">
                 <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
@@ -125,7 +124,7 @@
         <strong class="strong">Event Review</strong>
     </p>
     <div class="Past_Event_Reviews">
-        {% for blog in past_event_reviews %}
+        {% for blog in past_event_reviews|slice:":6" %}
         <div class="Past_Event_Reviews_card">
             <figure class="Past_Event_Reviews_banner">
                 <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
@@ -158,7 +157,7 @@
         <strong class="strong">Artists' Corner</strong>
     </p>
     <div class="artists_corner">
-        {% for blog in artists_corner %}
+        {% for blog in artists_corner|slice:":6" %}
         <div class="artists_corner-card">
             <figure class="artists_corner-banner">
                 <img src="{{ blog.image.url }}" alt="{{ blog.title }}" loading="lazy">
@@ -186,6 +185,13 @@
         </div>
         {% endfor %}
     </div>
+
+    
+
+
+
+
+
 </div>
 
 {% endblock %}

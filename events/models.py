@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MaxLengthValidator
 
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(validators=[MaxLengthValidator(350)])
     county = models.CharField(max_length=50)
     category_type = models.CharField(max_length=75,  null=True, blank=True)
     location = models.CharField(max_length=100)
@@ -15,6 +16,7 @@ class Event(models.Model):
     organizer = models.CharField(max_length=100)
     contact_email = models.EmailField()
     is_published = models.BooleanField(default=True)
+    pub_date = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.title

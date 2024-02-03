@@ -1,65 +1,132 @@
-/* events.css */
-
-.events {
+/* Updated CSS for responsiveness and centering */
+.event-cards-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: Poppins;
+    background-color: #fff;
+    color: #333;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    justify-content: center;
+    /* Center the event cards horizontally */
 }
 
-.card {
-    width: 100%;
-    max-width: 300px; /* Adjust the maximum width as needed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-    margin-bottom: 20px;
+.event-card {
+    width: calc(33.33% - 20px);
+    margin: 0 10px 20px;
+    /* Add margin around event cards */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+    /* Include padding and border in the width calculation */
 }
 
-.card:hover {
-    transform: scale(1.05);
-}
-
-.card-img-top {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.card-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.events-info {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-}
-
-.btn {
-    text-align: center;
-}
-
-.bttn {
-    background-color: #007bff;
-    color: #fff;
-    padding: 8px 15px;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-/* Add media queries for responsiveness */
-@media (min-width: 768px) {
-    .card {
-        max-width: 400px;
+@media only screen and (max-width: 768px) {
+    .event-card {
+        width: calc(100% - 20px);
     }
 }
 
-@media (min-width: 992px) {
-    .card {
-        max-width: 500px;
+.event-image {
+    position: relative;
+}
+
+.event-image img {
+    width: 100%;
+    height: auto;
+}
+
+.event-category {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.event-details {
+    padding: 20px;
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-meta-day {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.event-meta-day .event-meta-location {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    line-height: 3rem;
+    font-size: 16px;
+}
+
+.ribbon {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    line-height: 3rem;
+    font-size: 16px;
+}
+
+.location-icon {
+    width: 35px;
+    height: 50px;
+    margin-right: 5px; /* Adjust spacing between icon and text */
+    vertical-align: middle;
+}
+
+.clock-icon {
+    width: 25px;
+    height: 35px;
+    margin-right: 5px; /* Adjust spacing between icon and text */
+    vertical-align: middle;
+}
+
+.email-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px; /* Adjust spacing between icon and text */
+    vertical-align: middle;
+}
+
+.event-meta-details p {
+    margin-bottom: 5px;
+}
+
+.price {
+    text-align: center;
+}
+
+/* Media Query for responsiveness */
+@media only screen and (max-width: 768px) {
+    .event-card {
+        width: calc(50% - 20px);
+        /* Two cards per row on smaller screens */
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .event-card {
+        width: calc(100% - 20px);
+        /* One card per row on extra small screens */
     }
 }
