@@ -1,0 +1,22 @@
+<!-- blog_posts_by_author.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Blog Posts by {{ author_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Blog Posts by {{ author_name }}</h1>
+    <ul>
+        {% for post in blog_posts %}
+        <h3 class="h4">
+            <a href="{% url 'events:single_post' blog.id %}" class="latest-blogs-title">
+                {{ post.title }}
+            </a>
+        </h3>
+        {% empty %}
+            <li>No posts found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
