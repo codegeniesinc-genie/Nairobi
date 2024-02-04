@@ -1,0 +1,42 @@
+/* about.css */
+
+.container-about {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title-about {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.body-about h2 {
+    font-size: 1.5rem;
+    margin-top: 40px;
+}
+
+.body-about p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+@media only screen and (max-width: 768px) {
+    .container-about {
+        padding: 10px;
+    }
+
+    .title-about {
+        font-size: 1.5rem;
+    }
+
+    .body-about h2 {
+        font-size: 1.2rem;
+        margin-top: 20px;
+    }
+
+    .body-about p {
+        font-size: 0.9rem;
+    }
+}

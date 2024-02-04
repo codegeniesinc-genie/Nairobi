@@ -1,0 +1,30 @@
+/* Basic Styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+h1, h2, h3 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+ul {
+    margin-bottom: 1em;
+}
+
+footer {
+    font-size: 0.8em;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .col-lg-6 {
+        width: 100%;
+    }
+}

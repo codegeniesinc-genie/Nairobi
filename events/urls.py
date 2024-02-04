@@ -1,4 +1,4 @@
-# events/urls.py
+
 from django.urls import path
 from .views import HomePageView,DashBoardView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView,single_post,CheckOutPageView,PaymentPageView, LoadMorePostsView
 

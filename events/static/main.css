@@ -8,10 +8,17 @@
      text-align: justify;
  }
 
+ body p {
+    font-size: 1rem;
+    line-height: 1.6;
+ }
+
  a {
      text-decoration: none;
-     color: #eee;
+     color: #555;
  }
+
+
 
  header {
      width: 1140px;
@@ -26,6 +33,7 @@
 
  header a {
      margin-right: 30px;
+     color: #eee;
  }
 
  .carousel {
