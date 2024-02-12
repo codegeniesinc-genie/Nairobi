@@ -1,22 +1,5 @@
-from django.contrib.auth.models import AbstractUser
 from tinymce.models import HTMLField
 from django.db import models
-from django.utils import timezone
-
-
-class CustomUser(AbstractUser):
-    ADMIN = 'admin'
-    EVENT_ORGANIZER = 'event_organizer'
-    BLOG_AUTHOR = 'blog_author'
-    USER_ROLES = [
-        (ADMIN, 'Admin'),
-        (EVENT_ORGANIZER, 'Event Organizer'),
-        (BLOG_AUTHOR, 'Blog Author'),
-    ]
-    role = models.CharField(max_length=20, choices=USER_ROLES)
-
-CustomUser._meta.get_field('groups').remote_field.related_name = 'customuser_groups'
-CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'customuser_user_permissions'
 
 
 class Event(models.Model):
@@ -34,7 +17,6 @@ class Event(models.Model):
     image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     date = models.DateField()
     time = models.TimeField()
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True) 
     contact_email = models.EmailField()
     is_published = models.BooleanField(default=True)
     pub_date = models.DateTimeField(auto_now_add=True, null=True)
@@ -57,7 +39,6 @@ class Blog(models.Model):
     short_description =HTMLField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default=CATEGORY_CHOICES)
     content = HTMLField()
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True) 
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

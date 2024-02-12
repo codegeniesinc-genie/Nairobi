@@ -38,6 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     "django.contrib.sites",  # new
+    # 3rd party
+    "allauth", # new
+    "allauth.account", # new
+    "allauth.socialaccount", # new
+    # social providers
+    "allauth.socialaccount.providers.github", # new
+    "allauth.socialaccount.providers.twitter", # new
     'events',
     'tinymce',
 ]
@@ -131,3 +139,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTHENTICATION_BACKENDS = (
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = "profile"
+ACCOUNT_LOGOUT_ON_GET = True
