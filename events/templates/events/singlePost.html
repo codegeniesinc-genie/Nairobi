@@ -14,6 +14,7 @@
                 <button class="share-btn">Share</button>
             </div>
         </article>
+        <p><a href="{% url 'events:delete_blog' blog.id %}">Delete</a></p>
         <div class="pagination">
             <div class="paginationprev">
             {% if prev_post %}

@@ -19,11 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 from events.views import *
+from mpesa_api.views import * 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls', namespace='events')),
-    
+    path('payments/', include(('mpesa_api.urls', 'mpesa_api'), namespace='mpesa_api')),    
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

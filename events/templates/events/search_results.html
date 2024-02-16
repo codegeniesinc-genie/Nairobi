@@ -1,0 +1,40 @@
+<!-- search_results.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for "{{ query }}"</h1>
+
+    <h2>Users</h2>
+    <ul>
+        {% for user in users %}
+            <li>{{ user.username }}</li>
+        {% empty %}
+            <li>No users found</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Events</h2>
+    <ul>
+        {% for event in events %}
+            <li>{{ event.title }}</li>
+        {% empty %}
+            <li>No events found</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Blogs</h2>
+    <ul>
+        {% for blog in blogs %}
+            <li>{{ blog.title }}</li>
+        {% empty %}
+            <li>No blogs found</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,22 +1,47 @@
-<!-- create_blog_post.html -->
-{% extends 'base.html' %} {% load socialaccount %}
-{% load static %}
+<!-- profile.html -->
 
-{% block title %}Create Blog Post{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
 
-{% block content %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-<div class="container" style="text-align: center; padding-top: 10%;">
-  <h1>Django Social Login</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Profile Picture -->
+        <label for="profile_picture">Profile Picture:</label><br>
+        <input type="file" name="profile_picture" id="profile_picture"><br><br>
 
-  <br /><br />
+        <!-- Name -->
+        <label for="name">Name:</label><br>
+        <input type="text" name="name" id="name" value="{{ user.name }}"><br><br>
 
-  {% if user.is_authenticated %}
-    <h3>Welcome {{ user.username }} !!!</h3>
-    <br /><br />
-    <a href="{% url 'events:logout' %}" class="btn btn-danger">Logout</a>
-  {% endif %}
-</div>
+        <!-- Username -->
+        <label for="username">Username:</label><br>
+        <input type="text" name="username" id="username" value="{{ user.username }}"><br><br>
 
-{% endblock %}
+        <!-- Password -->
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" id="password"><br><br>
 
+        <!-- Confirm Password -->
+        <label for="confirm_password">Confirm Password:</label><br>
+        <input type="password" name="confirm_password" id="confirm_password"><br><br>
+
+        <button type="submit">Update Profile</button>
+    </form>
+</body>
+</html>

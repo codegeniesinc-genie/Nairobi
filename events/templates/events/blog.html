@@ -17,10 +17,22 @@
             <input type="email" name="email_address" placeholder="Your email address" class="email-field">
             <button type="submit" class="btn">Subscribe</button>
         </form>
+        <h1>Search</h1>
+
         <p class="subscribe-text">
             Get the email newsletter and unlock access to members-only content and updates
         </p>
     </div>
+
+
+    <h1>Search</h1>
+
+    <form method="GET" action="{% url 'events:search_results' %}">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="query">
+        <button type="submit">Search</button>
+    </form>
+
 
 
     <p class="section-subtitle">
@@ -53,7 +65,7 @@
         </div>
         {% endfor %}
     </div>
-    
+
     <p class="section-subtitle">
         <strong class="strong">Upcoming Events Review</strong>
     </p>
@@ -70,7 +82,7 @@
                     </li>
                 </ul>
                 <h3 class="h4">
-                    <a href="{% url 'events:single_post' blog.id %}"" class="upcoming_events_title">
+                    <a href="{% url 'events:single_post' blog.id %}"" class=" upcoming_events_title">
                         {{ blog.title }}
                     </a>
                 </h3>
@@ -186,7 +198,7 @@
         {% endfor %}
     </div>
 
-    
+
 
 
 
