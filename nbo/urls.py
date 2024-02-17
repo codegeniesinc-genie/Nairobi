@@ -23,7 +23,7 @@ from mpesa_api.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('events.urls', namespace='events')),
+    path('', include(('events.urls', 'events'), namespace='events')),
     path('payments/', include(('mpesa_api.urls', 'mpesa_api'), namespace='mpesa_api')),    
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

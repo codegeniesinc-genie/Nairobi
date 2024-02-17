@@ -1,10 +1,13 @@
 from django.contrib import admin
-from .models import Event, Blog
+from .models import Event, Blog, CartItem
 
  
 
 admin.site.register(Event)
 admin.site.register(Blog)
+admin.site.register(CartItem)
+
+
 admin.site.site_header = " LIVE IN NAIROBI"
 admin.site.site_title = 'LiveInNBO'
 admin.site.index_title = 'Admin Dashboard'

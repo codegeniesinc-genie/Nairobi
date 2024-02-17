@@ -1,6 +1,6 @@
 from django.urls import  path
 from . import views
-from .views import HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView, SinglePostView,CheckOutPageView,PaymentPageView
+from .views import HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView, SingleEventView, SinglePostView,CheckOutPageView,PaymentPageView
 
 app_name = 'events'
 
@@ -18,14 +18,12 @@ urlpatterns = [
     path('about/',AboutPageView.as_view(),name='about'),
     path('contact/',ContactPageView.as_view(),name='contact'),
     path('policy/',PrivacyPolicyPageView.as_view(),name='policy'),
-    path('checkout/',CheckOutPageView.as_view(),name='checkout'),
-    path('payment/',PaymentPageView.as_view(),name='payment'),
-    path('register/',views.register, name='register'),
-    path('login/',views.login,name='login'),
-    path('profile/', views.profile, name='profile'),
-    path('logout/', views.logout,name='logout'),
-    path('search/', views.search, name='search_results'),
-    path('cart/', views.cart_view, name='cart_view'),
-    path('checkout/', views.checkout_view, name='checkout_view'),
-    path('process_payment/', views.process_payment_view, name='process_payment'),
+    path('accounts/register/',views.register, name='register'),
+    path('accounts/login/',views.login,name='login'),
+    path('accounts/profile/', views.profile, name='profile'),
+    path('accounts/logout/', views.logout,name='logout'),
+    path('search/', views.search, name='search_results'),  
+    path('cart/', views.view_cart, name='view_cart'),
+    path('add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 ]

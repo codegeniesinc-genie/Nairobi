@@ -1,16 +1,11 @@
-<!-- events.html -->
-{% extends 'base.html' %}
-{% block content %}
-{% load static %}
+<!-- cart/cart.html -->
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="{% static 'events.css' %}">
-
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
-	<title>Product Catalog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
 	<style>
 		/* Add CSS styles for flex container and items */
 		.product-list {
@@ -22,8 +17,9 @@
 		}
 
 		.product-item {
+			
 			flex: 1; /* Grow to fill available space evenly */
-			max-width: 30%; /* Limit item width to avoid overcrowding */
+			/* Limit item width to avoid overcrowding */
 			margin: 10px; /* Add spacing between items */
 			border: 1px solid #ccc; /* Add a border for visual separation */
 			padding: 10px;
@@ -42,25 +38,33 @@
 		}
 	</style>
 </head>
+
 <body>
-	<h1>Product Catalog</h1>
+
+	<h1>Your Shopping Cart</h1>
+
+	<div class="product-list">
+
 	
-	<ul class="product-list">
-		{% for event in events|slice:":6" %}
-			<li class="product-item">
-				<img src="{{ event.image.url }}" alt="{{ event.name }}" width="200" height="150">
-				<h2>{{ event.name }}</h2>
-				<p>{{ event.description }}</p>
-				<p>Price: ${{ event.price }}</p>
-				<a href="#" class="buy-now-button">Buy Now</a>
-				<a class="buy-now-button" href="{% url 'events:add_to_cart' event.id %}">Add to Cart</a>
 
-			</li>
-		{% endfor %}
-	</ul>
+	{% for item in cart_items %}
+	<div class="product-item">
+		<p>{{ item.product.name }} ({{ item.quantity }})</p>
+		<p>Price: ${{ item.product.price }}</p>
+		<a href="{% url 'events:remove_from_cart' item.id %}">Remove</a>
+	</div>
+	{% empty %}
+	<p>Your cart is empty.</p>
+	{% endfor %}
+
+	</div>
+
+	<p>Total Price: ${{ total_price }}</p>
+
+	<a href="{% url 'events:events' %}">Continue Shopping</a>
+
+    <a href="{% url 'mpesa_api:lipa_na_mpesa' %}">CheckOut</a>
+
 </body>
+
 </html>
-
-{% endblock %}
-
-

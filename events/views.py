@@ -1,21 +1,18 @@
-# Import necessary modules and classes
-from django.views.generic.base import TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Cart, Event, Blog
-from .forms import CreateUserForm, LoginForm, BlogForm, EventForm, SearchForm
-from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate 
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Event, Blog
-from django.contrib.auth.models import User
+from .models import Event, Blog, CartItem
+from .forms import CreateUserForm, LoginForm, BlogForm, EventForm, SearchForm
+from django.http import JsonResponse
 
-# Define views
 class HomePageView(TemplateView):
     template_name = 'events/homepage.html'
 
     def get_context_data(self, **kwargs):
-        # Retrieve published events
         events = Event.objects.filter(is_published=True)
         context = {'events': events}
         return context
@@ -24,7 +21,6 @@ class EventsPageView(TemplateView):
     template_name = 'events/events.html'
 
     def get_context_data(self, **kwargs):
-        # Retrieve published events, ordered by publication date
         events = Event.objects.filter(is_published=True).order_by('-pub_date')
         context = {'events': events}
         return context
@@ -42,7 +38,6 @@ class BlogPageView(TemplateView):
     template_name = 'events/blog.html'
 
     def get_context_data(self, **kwargs):
-        # Retrieve blogs categorized by type, ordered by publication date
         context = super().get_context_data(**kwargs)
         all_blogs = Blog.objects.all()
         context['latest_blogs'] = all_blogs.filter(category='latest').order_by('-pub_date')
@@ -56,7 +51,6 @@ class SinglePostView(TemplateView):
     template_name = 'events/singlePost.html'
 
     def get_context_data(self, **kwargs):
-        # Retrieve single blog post along with related posts
         context = super().get_context_data(**kwargs)
         blog_id = kwargs['blog_id']
         blog = get_object_or_404(Blog, id=blog_id)
@@ -72,13 +66,17 @@ class SinglePostView(TemplateView):
         })
         return context
 
+class SingleEventView(DetailView):
+    model = Event
+    template_name = 'events/singleEvents.html'
+    context_object_name = 'event'
+
 class CheckOutPageView(TemplateView):
     template_name = 'events/checkout.html'
 
 class PaymentPageView(TemplateView):
     template_name = 'events/payment.html'
 
-# Define user-related views
 def register(request):
     form = CreateUserForm()
     if request.method == 'POST':
@@ -86,51 +84,44 @@ def register(request):
         if form.is_valid():
             form.save()
             return redirect("/login/")
-    
     context = {'registerform':form}
-
     return render(request, 'events/register.html', context=context)
 
-def login(request):
+def login_user(request):
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
-
-            user = authenticate(request,username=username, password=password)
-
+            user = authenticate(request, username=username, password=password)
             if user is not None:
-                auth.login(request,user)
+                login(request, user)
                 return redirect("/profile/")
-            
     context = {'loginform':form}
-
     return render(request, 'events/login.html', context=context)
 
 @login_required
-def logout(request):
-    auth.logout(request)
+def logout_user(request):
+    logout(request)
     return redirect("/login/")
 
 @login_required
 def profile(request):
     return render(request, 'events/profile.html')
 
-# Define blog-related views
 @login_required
 def create_blog(request):
     if request.method == 'POST':
-        form = BlogForm(request.POST,request.FILES)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
             blog = form.save(commit=False)
             blog.author = request.user
             blog.save()
-            return redirect("/blog/")
+            return redirect("/blogs/")
     else:
         form = BlogForm()
-    return render(request,'events/create_blog.html', {'form': form})
+    return render(request, 'events/create_blog.html', {'form': form})
 
 @login_required
 def update_blog(request, pk):
@@ -156,11 +147,10 @@ def delete_blog(request, pk):
     else:
         return render(request, 'events/access_denied.html')
 
-# Define event-related views
 @login_required
 def create_event(request):
     if request.method == 'POST':
-        form = EventForm(request.POST,request.FILES)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
@@ -202,12 +192,10 @@ def search(request):
     if form.is_valid():
         query = form.cleaned_data.get('query')
         users = User.objects.filter(username__icontains=query)
-        
         events = Event.objects.filter(
             Q(title__icontains=query) |
             Q(organizer__username__icontains=query)  
         )
-
         blogs = Blog.objects.filter(
             Q(title__icontains=query) |
             Q(author__username__icontains=query)  
@@ -220,90 +208,47 @@ def search(request):
         'events': events,
         'blogs': blogs
     }
-
-    # If no users found, return no results found message
+    
     if users.exists():
         for user in users:
-            # If user found, get all blogs associated with this user
             user_blogs = Blog.objects.filter(author=user)
             context['user_blogs'] = user_blogs
-            break  # Only consider the first user found
+            break
 
     return render(request, 'events/search_results.html', context)
 
+from mpesa_api.views import lipa_na_mpesa_online
 
-@login_required
-def add_to_cart(request, event_id):
-    # Get the event object based on the event_id
-    event = get_object_or_404(Event, pk=event_id)
-    
-    # Check if the event is already in the user's cart
-    cart_item, created = Cart.objects.get_or_create(user=request.user, event=event)
-
-    # If the event is already in the cart, update the quantity
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    else:
-        cart_item.save()
-
-    # Redirect the user to the cart page or any other desired page
-    return redirect('cart:cart_view')
-
-
-  # You need to define the URL pattern for the cart view
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Cart
-
-@login_required
-def cart_view(request):
-    # Retrieve all items in the cart for the current user
-    cart_items = Cart.objects.filter(user=request.user)
-    
-    # Calculate the total price of all items in the cart
-    total_price = sum(item.event.price * item.quantity for item in cart_items)
-
-    context = {
-        'cart_items': cart_items,
-        'total_price': total_price,
-    }
-    return render(request, 'events/cart_view.html', context)
-
-def checkout_view(request):
-    # Retrieve the user's cart items and total price
-    cart_items = request.user.cart_set.all()  # Assuming you have a Cart model associated with the user
-    total_price = sum(item.event.price * item.quantity for item in cart_items)
-
-    # Pass the cart items and total price to the checkout template
-    context = {
-        'cart_items': cart_items,
-        'total_price': total_price,
-    }
-
-    return render(request, 'events/checkout.html', context)
-
-from django.shortcuts import render
-from django.http import HttpResponse
-
-def process_payment_view(request):
+def checkout(request):
     if request.method == 'POST':
-        # Retrieve payment details from the form
-        card_number = request.POST.get('card_number')
-        expiration_date = request.POST.get('expiration_date')
-        cvv = request.POST.get('cvv')
-        
-        # Perform payment processing logic here
-        # For demonstration purposes, let's assume the payment is successful
-        payment_successful = True
-        
-        if payment_successful:
-            # Payment successful, render confirmation page
-            return render(request, 'events/payment_confirmation.html')
-        else:
-            # Payment failed, render error page
-            return render(request, 'events/payment_error.html')
-    
-    # If request method is not POST, return an empty response
-    return HttpResponse(status=400)
+        total_amount = request.POST.get('total_amount')
+        user_phone_number = request.POST.get('phone_number')
+        lipa_na_mpesa_online(request)
+        return render(request, 'payment_processing.html')
+    else:
+        return render(request, 'checkout_form.html')
+
+def payment(request):
+    if request.method == 'POST':
+        payment_amount = request.POST.get('amount')
+        payment_method = request.POST.get('method')
+        return JsonResponse({'message': 'Payment successful'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
+def view_cart(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    return render(request, 'events/cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+def add_to_cart(request, product_id):
+    product = Event.objects.get(id=product_id)
+    cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('events:view_cart')
+
+def remove_from_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart_item.delete()
+    return redirect('events:view_cart')

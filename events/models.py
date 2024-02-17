@@ -26,6 +26,20 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
+    class Meta:
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+
+class CartItem(models.Model):
+	product = models.ForeignKey(Event, on_delete=models.CASCADE, null=True)
+	quantity = models.PositiveIntegerField(default=0)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+	def __str__(self):
+		return f'{self.quantity} x {self.product.name}'
+
+
+    
 class Blog(models.Model):
 
     CATEGORY_CHOICES = [
@@ -50,13 +64,9 @@ class Blog(models.Model):
     
     def get_related_posts(self):
         return Blog.objects.filter(category=self.category).exclude(id=self.id)
+    
+    class Meta:
+        verbose_name = 'Blog'
+        verbose_name_plural = 'Blogs'
 
 
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Cart item for {self.event.title} - Quantity: {self.quantity}"

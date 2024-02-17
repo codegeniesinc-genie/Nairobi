@@ -23,10 +23,9 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(widget=PasswordInput())
 
 class BlogForm(forms.ModelForm):
-
     class Meta:
         model = Blog
-        fields = '__all__'
+        fields = ['title','short_description', 'content', 'category', 'image']
 
 class EventForm(forms.ModelForm):
     class Meta:
