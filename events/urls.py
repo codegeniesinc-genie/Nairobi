@@ -1,12 +1,13 @@
 from django.urls import  path
 from . import views
-from .views import HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView, SingleEventView, SinglePostView,CheckOutPageView,PaymentPageView
+from .views import CheckoutView, HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView,SinglePostView
 
 app_name = 'events'
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='homepage'),
     path('events/',EventsPageView.as_view(),name='events'),
+    path('events/<int:id>/', views.event_single, name='eventSingle'),
     path('events/create', views.create_event, name='create_event'),
     path('events/update/<int:pk>/', views.update_event, name='update_event'),
     path('events/delete/<int:pk>/', views.delete_event, name='delete_event'),
@@ -19,11 +20,16 @@ urlpatterns = [
     path('contact/',ContactPageView.as_view(),name='contact'),
     path('policy/',PrivacyPolicyPageView.as_view(),name='policy'),
     path('accounts/register/',views.register, name='register'),
-    path('accounts/login/',views.login,name='login'),
+    path('accounts/login/',views.login_user,name='login'),
     path('accounts/profile/', views.profile, name='profile'),
-    path('accounts/logout/', views.logout,name='logout'),
+    path('accounts/logout/', views.logout_user,name='logout'),
     path('search/', views.search, name='search_results'),  
     path('cart/', views.view_cart, name='view_cart'),
     path('add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('removeone/<int:item_id>/',views.removeone_from_cart,name='removeone_from_cart'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('receipt/<int:event_id>/', views.receipt, name='receipt'),
+    path('event/<int:event_id>/receipt/', views.generate_receipt_pdf, name='generate_receipt_pdf'),
+
 ]

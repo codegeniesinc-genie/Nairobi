@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+
+<body>
+    <h1>Checkout</h1>
+    {% load mathfilters %}
+    <ul>
+        {% for item in cart_items %}
+        <li>
+            {{ item.product_title }} - {{ item.quantity }} x KES {{ item.price }} = KES {{ item.quantity|mul:item.price }}
+        </li>
+        {% endfor %}
+
+
+    </ul>
+
+    <p>Total Price: KES {{ total_price }}</p>
+
+    <form id="checkout-form" method="post">
+        {% csrf_token %}
+        <label for="mpesa_number">Mpesa Number:</label>
+        <input type="text" name="mpesa_number" id="mpesa_number" required>
+
+        <input type="hidden" name="total_price" id="total_price" value="{{ total_price }}">
+
+        <button type="submit"> Buy</button>
+
+    </form>
+
+    <script>
+        document.getElementById('checkout-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Get the values of the inputs
+            var mpesaNumber = document.getElementById('mpesa_number').value;
+            var totalPrice = document.getElementById('total_price').value;
+
+            // Create a FormData object and append the values
+            var formData = new FormData();
+            formData.append('mpesa_number', mpesaNumber);
+            formData.append('total_price', totalPrice);
+
+            // Convert FormData to JSON
+            var jsonData = {};
+            formData.forEach(function (value, key) {
+                jsonData[key] = value;
+            });
+            var jsonString = JSON.stringify(jsonData);
+
+            // Log the JSON string
+            console.log("FormData as JSON:", jsonString);
+
+            // Create a new XMLHttpRequest object
+            var xhr = new XMLHttpRequest();
+
+            // Configure the POST request
+            xhr.open('POST', '/payments/online/lipa', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            // Define the onload function to handle the response
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        alert("Payment Successful");
+                        // Redirect or perform any other action upon successful payment
+                    } else {
+                        alert("Payment Failed: " + response.error);
+                    }
+                }
+            };
+
+            // Send the request with JSON data
+            xhr.send(jsonString);
+        });
+    </script>
+
+</body>
+
+</html>

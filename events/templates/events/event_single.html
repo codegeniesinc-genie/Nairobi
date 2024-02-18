@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.title }}</title>
+</head>
+<body>
+    <h1>{{ event.title }}</h1>
+    <p>County: {{ event.county }}</p>
+    <p>Category Type: {{ event.get_category_type_display }}</p>
+    <p>Location: {{ event.location }}</p>
+    <p>Price: {{ event.price }}</p>
+    <p>Organizer: {{ event.organizer.username }}</p>
+    <p>Date: {{ event.date }}</p>
+    <p>Time: {{ event.time }}</p>
+    <p>Contact Email: {{ event.contact_email }}</p>
+    <!-- Add more event details as needed -->
+</body>
+</html>

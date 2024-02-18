@@ -36,7 +36,7 @@ class CartItem(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 	def __str__(self):
-		return f'{self.quantity} x {self.product.name}'
+		return f'{self.quantity} x {self.product}'
 
 
     

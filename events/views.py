@@ -1,4 +1,8 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
@@ -7,11 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import Event, Blog, CartItem
 from .forms import CreateUserForm, LoginForm, BlogForm, EventForm, SearchForm
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+
 
 class HomePageView(TemplateView):
     template_name = 'events/homepage.html'
-
     def get_context_data(self, **kwargs):
         events = Event.objects.filter(is_published=True)
         context = {'events': events}
@@ -19,11 +23,15 @@ class HomePageView(TemplateView):
 
 class EventsPageView(TemplateView):
     template_name = 'events/events.html'
-
     def get_context_data(self, **kwargs):
         events = Event.objects.filter(is_published=True).order_by('-pub_date')
         context = {'events': events}
         return context
+    
+def event_single(request, id):
+    event = Event.objects.get(id=id)
+    return render(request, 'events/event_single.html', {'event': event})
+
 
 class AboutPageView(TemplateView):
     template_name = 'events/about.html'
@@ -36,7 +44,6 @@ class PrivacyPolicyPageView(TemplateView):
 
 class BlogPageView(TemplateView):
     template_name = 'events/blog.html'
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         all_blogs = Blog.objects.all()
@@ -49,7 +56,6 @@ class BlogPageView(TemplateView):
 
 class SinglePostView(TemplateView):
     template_name = 'events/singlePost.html'
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         blog_id = kwargs['blog_id']
@@ -66,10 +72,6 @@ class SinglePostView(TemplateView):
         })
         return context
 
-class SingleEventView(DetailView):
-    model = Event
-    template_name = 'events/singleEvents.html'
-    context_object_name = 'event'
 
 class CheckOutPageView(TemplateView):
     template_name = 'events/checkout.html'
@@ -87,18 +89,26 @@ def register(request):
     context = {'registerform':form}
     return render(request, 'events/register.html', context=context)
 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
+from .forms import LoginForm  # Import your LoginForm here
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
+from .forms import LoginForm  # Import your LoginForm here
+
 def login_user(request):
     form = LoginForm()
     if request.method == 'POST':
-        form = LoginForm(request, data=request.POST)
+        form = LoginForm(data=request.POST)
         if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect("/profile/")
-    context = {'loginform':form}
+    context = {'loginform': form}
     return render(request, 'events/login.html', context=context)
 
 @login_required
@@ -217,24 +227,6 @@ def search(request):
 
     return render(request, 'events/search_results.html', context)
 
-from mpesa_api.views import lipa_na_mpesa_online
-
-def checkout(request):
-    if request.method == 'POST':
-        total_amount = request.POST.get('total_amount')
-        user_phone_number = request.POST.get('phone_number')
-        lipa_na_mpesa_online(request)
-        return render(request, 'payment_processing.html')
-    else:
-        return render(request, 'checkout_form.html')
-
-def payment(request):
-    if request.method == 'POST':
-        payment_amount = request.POST.get('amount')
-        payment_method = request.POST.get('method')
-        return JsonResponse({'message': 'Payment successful'})
-    else:
-        return JsonResponse({'error': 'Invalid request method'})
 
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
@@ -246,9 +238,131 @@ def add_to_cart(request, product_id):
     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
     cart_item.quantity += 1
     cart_item.save()
-    return redirect('events:view_cart')
+    return redirect('events:events')
 
 def remove_from_cart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart_item.delete()
     return redirect('events:view_cart')
+
+def removeone_from_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.total_price = cart_item.quantity * cart_item.product.price
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect(reverse('events:checkout'))
+
+
+from django.views import View
+from django.http import JsonResponse
+from django.shortcuts import render
+from .models import CartItem
+from django.views import View
+from django.http import JsonResponse, HttpResponse
+from .models import CartItem
+
+class CheckoutView(View):
+    
+    def post(self, request):
+        data = json.loads(request.body)
+        mpesa_number = data.get('mpesa_number')
+        total_price = data.get('total_price')
+
+        result = self.lipa_na_mpesa_online(mpesa_number, total_price)
+        
+        if result == 'success':
+            
+            return JsonResponse({'success': True})
+        
+        else:
+            return JsonResponse({'success': False, 'error': result}, status=400)
+    
+
+    def get(self, request):
+        cart_items = CartItem.objects.all()
+        total_price = sum(item.quantity * item.product.price for item in cart_items)
+        serialized_cart_items = [
+            {
+                'product_title': item.product.title,
+                'quantity': item.quantity,
+                'price': item.product.price
+            }
+            for item in cart_items
+        ]
+        
+
+        context = {
+            'cart_items': serialized_cart_items,
+            'total_price': total_price,
+        }
+        return render(request, 'events/checkout.html', context)
+
+    
+def receipt(request, event_id):
+    try:
+        event_id = int(event_id)
+    except ValueError:
+        # Handle the case where event_id is not a valid integer
+        # You may want to log this or render an error page
+        return HttpResponse("Invalid event ID")
+
+    event = get_object_or_404(Event, pk=event_id)
+    
+    return render(request, 'events/pdf.html', {'event': event, 'event_id': event_id})
+
+    
+
+
+
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from .models import Event  # Assuming your Event model is defined in the same app
+
+def generate_receipt_pdf(request, event_id):
+    # Retrieve the event object
+    event = Event.objects.get(pk=event_id)
+
+    # Create a response object
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="event_receipt_{event.id}.pdf"'
+
+    # Create a PDF document
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    # Content for the PDF
+    content = []
+
+    # Add title
+    title = Paragraph(f'<b>{event.title}</b>', styles['Title'])
+    content.append(title)
+
+    # Add details table
+    data = [
+        ['County', event.county],
+        ['Location', event.location],
+        ['Price', f'${event.price}'],
+        ['Organizer', event.organizer.username],
+        ['Date', str(event.date)],
+        ['Time', str(event.time)],
+        ['Contact Email', event.contact_email],
+    ]
+    table = Table(data)
+    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                               ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+    content.append(table)
+
+    doc.build(content)
+
+    return response

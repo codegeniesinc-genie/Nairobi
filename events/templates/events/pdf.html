@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Receipt</title>
+    <!-- Add any additional CSS styles here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Event Details</h2>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>{{ event.title }}</td>
+            </tr>
+            <tr>
+                <td>County</td>
+                <td>{{ event.county }}</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>{{ event.location }}</td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td>${{ event.price }}</td>
+            </tr>
+            <tr>
+                <td>Organizer</td>
+                <td>{{ event.organizer.username }}</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>{{ event.date }}</td>
+            </tr>
+            <tr>
+                <td>Time</td>
+                <td>{{ event.time }}</td>
+            </tr>
+            <tr>
+                <td>Contact Email</td>
+                <td>{{ event.contact_email }}</td>
+            </tr>
+        </table>
+        <a href="{% url 'events:generate_receipt_pdf' event_id=event.id %}" class="download-btn">Generate Receipt PDF</a>
+    </div>
+</body>
+</html>

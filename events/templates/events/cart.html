@@ -40,8 +40,11 @@
 </head>
 
 <body>
+    {% load mathfilters %}
 
 	<h1>Your Shopping Cart</h1>
+    <p>Event ID: {{ event.id }}</p>
+
 
 	<div class="product-list">
 
@@ -50,7 +53,7 @@
 	{% for item in cart_items %}
 	<div class="product-item">
 		<p>{{ item.product.name }} ({{ item.quantity }})</p>
-		<p>Price: ${{ item.product.price }}</p>
+		<p>Price: ${{ item.quantity|mul:item.product.price }}</p>
 		<a href="{% url 'events:remove_from_cart' item.id %}">Remove</a>
 	</div>
 	{% empty %}
@@ -63,7 +66,7 @@
 
 	<a href="{% url 'events:events' %}">Continue Shopping</a>
 
-    <a href="{% url 'mpesa_api:lipa_na_mpesa' %}">CheckOut</a>
+    <a href="{% url 'events:checkout' %}">CheckOut</a>
 
 </body>
 
