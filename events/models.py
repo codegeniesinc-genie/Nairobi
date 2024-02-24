@@ -70,3 +70,19 @@ class Blog(models.Model):
         verbose_name_plural = 'Blogs'
 
 
+
+# models.py
+from django.contrib.auth.models import User
+from django.db import models
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    # Add any other additional fields you need
+
+    def __str__(self):
+        return self.user.username
+
+

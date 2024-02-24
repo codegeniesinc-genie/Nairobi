@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+#remember to update urls i.e. avoid mpesa like words e.g lipa, c2b and update all URLS
 
 urlpatterns = [
     path('access/token', views.getAccessToken, name='get_mpesa_access_token'),

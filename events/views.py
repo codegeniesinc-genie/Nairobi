@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Event, Blog, CartItem
+from .models import Event, Blog, CartItem, Profile
 from .forms import CreateUserForm, LoginForm, BlogForm, EventForm, SearchForm
 from django.shortcuts import render, redirect
 
@@ -79,16 +79,23 @@ class CheckOutPageView(TemplateView):
 class PaymentPageView(TemplateView):
     template_name = 'events/payment.html'
 
+
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import CreateUserForm
+from .models import Profile
+
 def register(request):
     form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("/login/")
-    context = {'registerform':form}
+            user = form.save()  # Save the user instance
+            Profile.objects.create(user=user)  # Create a profile associated with the user
+            return redirect(reverse("events:login"))
+    context = {'registerform': form}
     return render(request, 'events/register.html', context=context)
-
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from .forms import LoginForm  # Import your LoginForm here
@@ -107,18 +114,43 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/profile/")
+                return redirect(reverse("events:profile"))
     context = {'loginform': form}
     return render(request, 'events/login.html', context=context)
 
 @login_required
 def logout_user(request):
     logout(request)
-    return redirect("/login/")
+    return redirect(reverse("events:login"))
 
 @login_required
 def profile(request):
-    return render(request, 'events/profile.html')
+    user = request.user
+    blogs = Blog.objects.filter(author=user)
+    events = Event.objects.filter(organizer=user)
+    context = {
+        'user': user,
+        'blogs': blogs,
+        'events': events,
+    }
+    return render(request, 'events/profile.html', context)
+
+
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import ProfileUpdateForm
+
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('events:profile'))  # Redirect to a success page
+    else:
+        form = ProfileUpdateForm(instance=request.user.profile)
+    return render(request, 'events/profile_update.html', {'form': form})
 
 @login_required
 def create_blog(request):
@@ -146,7 +178,7 @@ def update_blog(request, pk):
             form = BlogForm(instance=blog)
         return render(request, 'events/update_blog.html/', {'form': form})
     else:
-        return render(request, 'events/access_denied.html/')
+       return redirect(reverse("events:login"))
 
 @login_required
 def delete_blog(request, pk):
@@ -155,7 +187,7 @@ def delete_blog(request, pk):
         blog.delete()
         return redirect("/blog/")
     else:
-        return render(request, 'events/access_denied.html')
+       return redirect(reverse("events:login"))
 
 @login_required
 def create_event(request):
@@ -183,7 +215,7 @@ def update_event(request, pk):
             form = EventForm(instance=event)
         return render(request, 'events/update_event.html', {'form': form})
     else:
-        return render(request, 'events/access_denied.html')
+       return redirect(reverse("events:login"))
 
 @login_required
 def delete_event(request, pk):
@@ -192,7 +224,7 @@ def delete_event(request, pk):
         event.delete()
         return redirect('/events/')
     else:
-        return render(request, 'events/access_denied.html')
+        return redirect(reverse("events:login"))
 
 def search(request):
     form = SearchForm(request.GET)

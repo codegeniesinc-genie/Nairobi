@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-bm%pd)1m65lq&=w@r(!gas8=w3e5hv_vz=yeyu%%&**=9_+p_!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com','127.0.0.1','6b7b-102-213-48-6.ngrok-free.app']
+
+
 
 
 # Application definition
@@ -40,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'events',
     'mpesa_api',
-    'mathfilters'
+    'mathfilters',
+    #'crispy_forms',
+    #'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -183,3 +187,6 @@ MPESA_INITIATOR_USERNAME = 'Live In Nairobi'
 # Plaintext password for initiator (to be used in B2C, B2B, AccountBalance and TransactionStatusQuery Transactions)
 
 MPESA_INITIATOR_SECURITY_CREDENTIAL = 'initiator_security_credential'
+
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
+

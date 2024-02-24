@@ -7,8 +7,8 @@ from .mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 from .models import MpesaPayment
 
 def getAccessToken(request):
-    consumer_key = 'cHnkwYIgBbrxlgBoneczmIJFXVm0oHky'
-    consumer_secret = '2nHEyWSD4VjpNh2g'
+    consumer_key = 'QF2ectS95whw90wkbiYAS0bJfMPHy9vdG0IbULEpevL2X24U'
+    consumer_secret = 'YGpbPMFye7gAiz9LUBrwvQ5KLS7mlJhBzzJresNAtsIOhiLw9TtHANbeeJW5nqQ9'
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
     mpesa_access_token = json.loads(r.text)
@@ -19,9 +19,6 @@ def getAccessToken(request):
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
-
-
-
 
 
 from django.http import JsonResponse
@@ -70,6 +67,9 @@ def lipa_na_mpesa_online(request):
     response = requests.post(api_url, json=request_data, headers=headers)
     
     if response.status_code == 200:
+        call_back(request)
+        validation(request)
+        confirmation(request)
         return HttpResponse('success')
     else:
         return HttpResponse('Failed to initiate STK push', status=response.status_code)
@@ -83,36 +83,32 @@ def register_urls(request):
     options = {
         "ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
         "ResponseType": "Completed",
-        "ConfirmationURL": "https://79372821.ngrok.io/api/v1/c2b/confirmation",
-        "ValidationURL": "https://79372821.ngrok.io/api/v1/c2b/validation"
+        "ConfirmationURL": "https://8f0d-102-213-48-6.ngrok-free.app/payments/c2b/confirmation",
+        "ValidationURL": "https://8f0d-102-213-48-6.ngrok-free.app/payments/c2b/validation"
     }
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
+from django.http import JsonResponse
+
 @csrf_exempt
 def call_back(request):
-    return HttpResponse("Callback received successfully")
+    if request.method == 'POST':
+        mpesa_body = request.body.decode('utf-8')
+        mpesa_payment = json.loads(mpesa_body)
+        transaction_id = mpesa_payment.get('TransactionID')
+        amount = mpesa_payment.get('Amount')
+        response_data = {"ResultCode": 0, "ResultDesc": "Callback received successfully", "mpesa_payment": mpesa_payment}
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
 @csrf_exempt
 def validation(request):
     context = {"ResultCode": 0, "ResultDesc": "Accepted"}
     return JsonResponse(dict(context))
 
-@csrf_exempt
 def confirmation(request):
-    mpesa_body = request.body.decode('utf-8')
-    mpesa_payment = json.loads(mpesa_body)
-    payment = MpesaPayment(
-        first_name=mpesa_payment['FirstName'],
-        last_name=mpesa_payment['LastName'],
-        middle_name=mpesa_payment['MiddleName'],
-        description=mpesa_payment['TransID'],
-        phone_number=mpesa_payment['MSISDN'],
-        amount=mpesa_payment['TransAmount'],
-        reference=mpesa_payment['BillRefNumber'],
-        organization_balance=mpesa_payment['OrgAccountBalance'],
-        type=mpesa_payment['TransactionType'],
-    )
-    payment.save()
-    context = {"ResultCode": 0, "ResultDesc": "Accepted"}
-    return JsonResponse(dict(context))
+    pass
+
+

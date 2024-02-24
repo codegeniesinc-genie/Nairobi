@@ -15,6 +15,9 @@
     <p>Date: {{ event.date }}</p>
     <p>Time: {{ event.time }}</p>
     <p>Contact Email: {{ event.contact_email }}</p>
+    <button>
+        <a href="{% url 'events:receipt' event.id %}">Generate Receipt</a>
+    </button>
     <!-- Add more event details as needed -->
 </body>
 </html>
