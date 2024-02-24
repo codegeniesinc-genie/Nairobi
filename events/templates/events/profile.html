@@ -1,21 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        /* Your custom styles here */
         .profile-header {
             background-color: #f0f0f0;
             padding: 20px;
             display: flex;
             align-items: center;
         }
+
         .profile-image {
             width: 100px;
             height: 100px;
@@ -23,17 +24,21 @@
             overflow: hidden;
             margin-right: 20px;
         }
+
         .profile-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .update-profile-button {
             margin-left: auto;
         }
+
         .post-list {
             margin-top: 20px;
         }
+
         .post-item {
             background-color: #f9f9f9;
             padding: 10px;
@@ -41,48 +46,89 @@
             display: flex;
             align-items: center;
         }
+
         .post-title {
             flex: 1;
             margin-right: 10px;
         }
+
         .post-actions {
+            margin-left: auto;
+        }
+
+        .event-list {
+            margin-top: 20px;
+        }
+
+        .event-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .event-title {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .event-actions {
             margin-left: auto;
         }
     </style>
 </head>
 <body>
-    <div class="profile-header">
-        <div class="profile-image">
-            <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{{ 'path_to_default_image.jpg' }}{% endif %}" alt="Profile Picture">
+<div class="container mt-4">
+    <div class="profile-header d-flex align-items-center">
+        <div class="profile-image mr-3">
+            <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{{ 'path_to_default_image.jpg' }}{% endif %}" class="img-fluid rounded-circle" alt="Profile Picture">
         </div>
         <h1>{{ user.username }}</h1>
-        <button class="update-profile-button">Update Profile</button>
+        <a class="btn btn-primary ml-auto" href="{% url 'events:profile_update' %}">Update Profile</a></button>
     </div>
 
-    <div class="post-list">
-        <h2>Posts</h2>
-        {% for blog in blogs %}
-        <div class="post-item">
-            <div class="post-title">{{ blog.title }}</div>
-            <div class="post-actions">
-                <button>Edit</button>
-                <button>Delete</button>
+    {% if user.profile %}
+        {% if user.profile.func == 'Author' %}
+            <a href="{% url 'events:create_blog' %}" class="btn btn-success mt-3">Create Blog</a>
+            <div class="post-list mt-4">
+                <h2>Posts</h2>
+                {% for blog in user.blog_set.all %}
+                <div class="post-item card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ blog.title }}</h5>
+                        <div class="post-actions">
+                            <a href="{% url 'events:update_blog' blog.id%}" class="btn btn-primary mt-3">Edit</a>
+                            <a href="{% url 'events:delete_blog' blog.id%}" class="btn btn-primary mt-3">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-    </div>
+        {% elif user.profile.func == 'Organizer' %}
+            <a href="{% url 'events:create_event' %}" class="btn btn-primary mt-3">Create Event</a>
+            <div class="event-list mt-4">
+                <h2>Events</h2>
+                {% for event in user.event_set.all %}
+                <div class="event-item card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <div class="event-actions">
+                            <a href="{% url 'events:update_event' event.id%}" class="btn btn-primary mt-3">Edit</a>
+                            <a href="{% url 'events:delete_event' event.id%}" class="btn btn-primary mt-3">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
 
-    <div class="event-list">
-        <h2>Events</h2>
-        {% for event in events %}
-        <div class="event-item">
-            <div class="event-title">{{ event.title }}</div>
-            <div class="event-actions">
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+<!-- Bootstrap JS CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a" crossorigin="anonymous"></script>
 </body>
 </html>
+{% endblock %}

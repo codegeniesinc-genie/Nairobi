@@ -1,6 +1,6 @@
 from django.urls import  path
 from . import views
-from .views import CheckoutView, HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView,SinglePostView
+from .views import AuthorProfileView, CheckoutView, HomePageView,EventsPageView,AboutPageView,ContactPageView,PrivacyPolicyPageView,BlogPageView,SinglePostView
 
 app_name = 'events'
 
@@ -32,5 +32,6 @@ urlpatterns = [
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('receipt/<int:event_id>/', views.receipt, name='receipt'),
     path('event/<int:event_id>/receipt/', views.generate_receipt_pdf, name='generate_receipt_pdf'),
+    path('author/<int:author_id>/', AuthorProfileView.as_view(), name='author_profile'),
 
 ]

@@ -6,31 +6,22 @@ from requests.auth import HTTPBasicAuth
 from .mpesa_credentials import MpesaAccessToken, LipanaMpesaPpassword
 from .models import MpesaPayment
 
+# Get M-Pesa Access Token
 def getAccessToken(request):
     consumer_key = 'QF2ectS95whw90wkbiYAS0bJfMPHy9vdG0IbULEpevL2X24U'
     consumer_secret = 'YGpbPMFye7gAiz9LUBrwvQ5KLS7mlJhBzzJresNAtsIOhiLw9TtHANbeeJW5nqQ9'
-    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
-    r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
+    api_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+    r = requests.get(api_url, auth=HTTPBasicAuth(consumer_key, consumer_secret))
     mpesa_access_token = json.loads(r.text)
     validated_mpesa_access_token = mpesa_access_token['access_token']
     return HttpResponse(validated_mpesa_access_token)
 
-
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-import requests
-
-
-from django.http import JsonResponse
-import json
-
+# Lipa Na M-Pesa Online
 @csrf_exempt
 def lipa_na_mpesa_online(request):
- 
     if request.method != 'POST':
         return HttpResponse('Method Not Allowed', status=405)
 
-    # Get JSON data from the request body
     try:
         json_data = json.loads(request.body)
         mpesa_number = float(json_data.get('mpesa_number'))
@@ -67,14 +58,11 @@ def lipa_na_mpesa_online(request):
     response = requests.post(api_url, json=request_data, headers=headers)
     
     if response.status_code == 200:
-        call_back(request)
-        validation(request)
-        confirmation(request)
         return HttpResponse('success')
     else:
         return HttpResponse('Failed to initiate STK push', status=response.status_code)
 
-
+# Register URLs
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
@@ -89,8 +77,7 @@ def register_urls(request):
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
-from django.http import JsonResponse
-
+# M-Pesa Callback
 @csrf_exempt
 def call_back(request):
     if request.method == 'POST':
@@ -103,12 +90,35 @@ def call_back(request):
     else:
         return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
+# M-Pesa Validation
 @csrf_exempt
 def validation(request):
     context = {"ResultCode": 0, "ResultDesc": "Accepted"}
     return JsonResponse(dict(context))
 
+# M-Pesa Confirmation
+@csrf_exempt
 def confirmation(request):
-    pass
+    mpesa_body =request.body.decode('utf-8')
+    mpesa_payment = json.loads(mpesa_body)
 
+    payment = MpesaPayment(
+        first_name=mpesa_payment['FirstName'],
+        last_name=mpesa_payment['LastName'],
+        middle_name=mpesa_payment['MiddleName'],
+        description=mpesa_payment['TransID'],
+        phone_number=mpesa_payment['MSISDN'],
+        amount=mpesa_payment['TransAmount'],
+        reference=mpesa_payment['BillRefNumber'],
+        organization_balance=mpesa_payment['OrgAccountBalance'],
+        type=mpesa_payment['TransactionType'],
 
+    )
+    payment.save()
+
+    context = {
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    }
+
+    return JsonResponse(dict(context))

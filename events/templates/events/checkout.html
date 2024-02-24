@@ -5,37 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Checkout</h1>
-    {% load mathfilters %}
-    <ul>
-        {% for item in cart_items %}
-        <li>
-            {{ item.product_title }} - {{ item.quantity }} x KES {{ item.price }} = KES {{ item.quantity|mul:item.price
-            }}
-        </li>
-        {% endfor %}
+    <div class="container">
+        <h1 class="mt-4">Checkout</h1>
+        <ul class="list-group">
+            {% for item in cart_items %}
+            <li class="list-group-item">
+                {{ item.product_title }} - {{ item.quantity }} x KES {{ item.price }} = KES {{ item.quantity|mul:item.price }}
+            </li>
+            {% endfor %}
+        </ul>
 
+        <p class="mt-3">Total Price: KES {{ total_price }}</p>
 
-    </ul>
+        <form id="checkout-form" method="post" class="mt-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="mpesa_number">Mpesa Number:</label>
+                <input type="text" name="mpesa_number" id="mpesa_number" class="form-control" required>
+            </div>
 
-    <p>Total Price: KES {{ total_price }}</p>
+            <input type="hidden" name="total_price" id="total_price" value="{{ total_price }}">
 
-    <form id="checkout-form" method="post">
-        {% csrf_token %}
-        <label for="mpesa_number">Mpesa Number:</label>
-        <input type="text" name="mpesa_number" id="mpesa_number" required>
+            <button type="submit" class="btn btn-primary">Buy</button>
+        </form>
+    </div>
 
-        <input type="hidden" name="total_price" id="total_price" value="{{ total_price }}">
-
-        <button type="submit"> Buy</button>
-
-    </form>
+    <!-- Bootstrap JS CDN (optional, depending on your requirements) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a" crossorigin="anonymous"></script>
 
     <script>
-        document.getElementById('checkout-form').addEventListener('submit', function (event) {
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
             // Get the values of the inputs
@@ -49,7 +55,7 @@
 
             // Convert FormData to JSON
             var jsonData = {};
-            formData.forEach(function (value, key) {
+            formData.forEach(function(value, key) {
                 jsonData[key] = value;
             });
             var jsonString = JSON.stringify(jsonData);
@@ -65,7 +71,7 @@
             xhr.setRequestHeader('Content-Type', 'application/json');
 
             // Define the onload function to handle the response
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
                     if (response.success) {
@@ -82,9 +88,6 @@
             xhr.send(jsonString);
         });
     </script>
-
-
-
 </body>
 
 </html>

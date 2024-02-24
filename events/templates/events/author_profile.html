@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ author.first_name }} {{ author.last_name }}'s Profile</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here if needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ author.first_name }} {{ author.last_name }}'s Profile</h1>
+        <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{{ 'path_to_default_image.jpg' }}{% endif %}"
+            class="img-fluid" alt="Profile Picture">
+
+        <p>Total number of posts: {{ total_posts }}</p>
+        
+        <h2>Categories Written In:</h2>
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item">{{ category }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Bootstrap JS CDN (optional, depending on your requirements) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a" crossorigin="anonymous"></script>
+</body>
+</html>

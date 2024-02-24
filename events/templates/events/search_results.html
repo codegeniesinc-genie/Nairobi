@@ -1,40 +1,68 @@
-<!-- search_results.html -->
+{% extends 'base.html' %}
 
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1, h2, h3 {
+            margin-top: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Search Results for "{{ query }}"</h1>
+    <div class="container">
+        <h1>Search Results for "{{ query }}"</h1>
 
-    <h2>Users</h2>
-    <ul>
-        {% for user in users %}
-            <li>{{ user.username }}</li>
-        {% empty %}
-            <li>No users found</li>
-        {% endfor %}
-    </ul>
+        <h2>Users</h2>
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">{{ user.username }}</li>
+            {% empty %}
+                <li class="list-group-item">No users found</li>
+            {% endfor %}
+        </ul>
 
-    <h2>Events</h2>
-    <ul>
-        {% for event in events %}
-            <li>{{ event.title }}</li>
-        {% empty %}
-            <li>No events found</li>
-        {% endfor %}
-    </ul>
+        <h2>Events</h2>
+        <ul class="list-group">
+            {% for event in events %}
+                <li class="list-group-item">{{ event.title }}</li>
+            {% empty %}
+                <li class="list-group-item">No events found</li>
+            {% endfor %}
+        </ul>
 
-    <h2>Blogs</h2>
-    <ul>
-        {% for blog in blogs %}
-            <li>{{ blog.title }}</li>
-        {% empty %}
-            <li>No blogs found</li>
-        {% endfor %}
-    </ul>
+        <h2>Blogs</h2>
+        <ul class="list-group">
+            {% for blog in blogs %}
+                <li class="list-group-item">{{ blog.title }}</li>
+            {% empty %}
+                <li class="list-group-item">No blogs found</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a" crossorigin="anonymous"></script>
 </body>
 </html>
+{% endblock %}

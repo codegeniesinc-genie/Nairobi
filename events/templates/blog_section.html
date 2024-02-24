@@ -3,7 +3,7 @@
 {% for blog in blogs|slice:":5" %}
     <div class="blog-post">
         <h3 class="blog-title"><a href="{% url 'events:single_post' blog.id %}"> {{ forloop.counter }}| {{ blog.title }}</a></h3>
-        <p class="blog-listing"> by {{ blog.author }} in {{ blog.category }} | {{ blog.pub_date }}</p>
+        <p class="blog-listing"> by {{ blog.author.first_name }} in {{ blog.category }} | {{ blog.pub_date }}</p>
     </div>
 {% endfor %}
 

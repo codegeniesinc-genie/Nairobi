@@ -17,7 +17,15 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+# forms.py
+# forms.py
+# forms.py
 class CreateUserForm(UserCreationForm):
+    FUNCTION_CHOICES = (
+        ('Author', 'Author'),
+        ('Organizer', 'Organizer'),
+    )
+    func = forms.ChoiceField(choices=FUNCTION_CHOICES, required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     first_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     GENDER_CHOICES = (
@@ -29,7 +37,7 @@ class CreateUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'gender']
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'gender', 'func']
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput())

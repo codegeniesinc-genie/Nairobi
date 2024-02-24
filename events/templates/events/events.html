@@ -1,66 +1,88 @@
-<!-- events.html -->
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="{% static 'events.css' %}">
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Product Catalog</title>
-	<style>
-		/* Add CSS styles for flex container and items */
-		.product-list {
-			display: flex;
-			flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
-			justify-content: space-between; /* Space items evenly along the main axis */
-			list-style: none; /* Remove list styles */
-			padding: 0;
-		}
-
-		.product-item {
-			flex: 1; /* Grow to fill available space evenly */
-			max-width: 30%; /* Limit item width to avoid overcrowding */
-			margin: 10px; /* Add spacing between items */
-			border: 1px solid #ccc; /* Add a border for visual separation */
-			padding: 10px;
-			text-align: center;
-		}
-
-		/* Style the "Buy Now" button */
-		.buy-now-button {
-			display: block;
-			margin-top: 10px;
-			background-color: #007bff;
-			color: #fff;
-			text-decoration: none;
-			padding: 5px 10px;
-			border-radius: 5px;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'events.css' %}">
 </head>
+
 <body>
-	<h1>Product Catalog</h1>
-	
-	<ul class="product-list">
-		{% for event in events|slice:":6" %}
-			<li class="product-item">
-				<img src="{{ event.image.url }}" alt="{{ event.name }}" width="200" height="150">
-				<h2> <a href="{% url 'events:eventSingle' id=event.id %}">{{ event.title }}</a></h2>
-				<p>{{ event.description }}</p>
-				<p>Price: ${{ event.price }}</p>
-				<a href="#" class="buy-now-button">Buy Now</a>
-				<a class="buy-now-button" href="{% url 'events:add_to_cart' event.id %}">Add to Cart</a>
+    <h1>Product Catalog</h1>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-			</li>
-		{% endfor %}
-	</ul>
+    <!-- Sign-in/Register or Profile button based on user authentication -->
+    <div class="container">
+        {% if user.is_authenticated %}
+        <a href="{% url 'events:profile' %}" class="btn btn-primary">Profile</a>
+        <a href="{% url 'events:logout' %}" class="btn btn-primary">Log Out</a>
+        {% else %}
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <a href="{% url 'events:login' %}" class="btn btn-primary">Sign In</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'events:register' %}" class="btn btn-success">Register</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS CDN (optional, depending on your requirements) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a"
+        crossorigin="anonymous"></script>
+
+
+    <div class="container">
+        <div class="row">
+            {% for event in events|slice:":6" %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }}">
+                    <div class="card-body">
+                        <h2 class="card-title"><a href="{% url 'events:eventSingle' id=event.id %}">{{ event.title}}</a></h2>
+                        <p class="card-text">{{ event.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-outline-secondary">View</a>
+                                <a href="#" class="btn btn-sm btn-outline-secondary">Add to Cart</a>
+                            </div>
+                            <small class="text-muted">${{ event.price }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-JGscS0uoS2Kj36vVaxoXjv2nX3e5cWXwqEu6x3owkj8V6k9qkR0XpJzufIS6z7Rh"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shCk5Bc3EYzvF3h1axtj0od+qPZyX6udo7h9a"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
-
 {% endblock %}
-
-

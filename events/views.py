@@ -1,4 +1,5 @@
 import json
+from django import forms
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -69,7 +70,9 @@ class SinglePostView(TemplateView):
             'next_post': next_post,
             'prev_post': prev_post,
             'latest_blogs': latest_blogs,
+            'author_id': blog.author.id,
         })
+        
         return context
 
 
@@ -86,16 +89,48 @@ from django.urls import reverse
 from .forms import CreateUserForm
 from .models import Profile
 
+# views.py
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import CreateUserForm
+from .models import Profile
+
+# views.py
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import CreateUserForm
+from .models import Profile
+
+# views.py
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import CreateUserForm
+from .models import Profile
+
+# views.py
+from django.contrib.auth.forms import UserCreationForm
+from .forms import CreateUserForm
+
 def register(request):
-    form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Save the user instance
-            Profile.objects.create(user=user)  # Create a profile associated with the user
+            user = form.save(commit=False)
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.gender = form.cleaned_data.get('gender')
+            user.save()
+            func = form.cleaned_data.get('func')
+            profile = Profile.objects.create(user=user, func=func)
             return redirect(reverse("events:login"))
+    else:
+        form = CreateUserForm()
     context = {'registerform': form}
     return render(request, 'events/register.html', context=context)
+
+
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from .forms import LoginForm  # Import your LoginForm here
@@ -128,10 +163,12 @@ def profile(request):
     user = request.user
     blogs = Blog.objects.filter(author=user)
     events = Event.objects.filter(organizer=user)
+
     context = {
         'user': user,
         'blogs': blogs,
         'events': events,
+        'profile':profile,
     }
     return render(request, 'events/profile.html', context)
 
@@ -173,7 +210,7 @@ def update_blog(request, pk):
             form = BlogForm(request.POST, instance=blog)
             if form.is_valid():
                 form.save()
-                return redirect("/blog/")
+                return redirect("/blogs/")
         else:
             form = BlogForm(instance=blog)
         return render(request, 'events/update_blog.html/', {'form': form})
@@ -185,7 +222,7 @@ def delete_blog(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
     if request.user == blog.author:
         blog.delete()
-        return redirect("/blog/")
+        return redirect("/blogs/")
     else:
        return redirect(reverse("events:login"))
 
@@ -356,13 +393,38 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from .models import Event  # Assuming your Event model is defined in the same app
 
+import qrcode
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib import colors
+from django.http import HttpResponse
+from .models import Event
+
+import qrcode
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image
+from reportlab.lib import colors
+from django.http import HttpResponse
+from .models import Event
+
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from django.http import HttpResponse
+from .models import Event
+
 def generate_receipt_pdf(request, event_id):
     # Retrieve the event object
     event = Event.objects.get(pk=event_id)
 
     # Create a response object
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="event_receipt_{event.id}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="{event.title}.pdf"'
 
     # Create a PDF document
     doc = SimpleDocTemplate(response, pagesize=letter)
@@ -374,27 +436,84 @@ def generate_receipt_pdf(request, event_id):
     # Add title
     title = Paragraph(f'<b>{event.title}</b>', styles['Title'])
     content.append(title)
+    content.append(Paragraph("<br/><br/>", styles['Normal']))  # Add spacing
 
-    # Add details table
-    data = [
-        ['County', event.county],
-        ['Location', event.location],
-        ['Price', f'${event.price}'],
-        ['Organizer', event.organizer.username],
+    # Add details
+    details = [
         ['Date', str(event.date)],
         ['Time', str(event.time)],
-        ['Contact Email', event.contact_email],
+        ['Location', event.location],
     ]
-    table = Table(data)
-    table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.gray),
-                               ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                               ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                               ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                               ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                               ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                               ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
-    content.append(table)
+
+    for detail in details:
+        detail_title = detail[0]
+        detail_value = detail[1]
+        detail_paragraph = Paragraph(f'<b>{detail_title}:</b> {detail_value}', styles['Normal'])
+        content.append(detail_paragraph)
+
+    content.append(Paragraph("<br/><br/>", styles['Normal']))  # Add spacing
+
+    # Generate QR code with event details
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=5,
+        border=4,
+    )
+    qr_data = f"Event: {event.title}\nLocation: {event.location}\nDate: {event.date}\nTime: {event.time}"
+    qr.add_data(qr_data)
+    qr.make(fit=True)
+
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    qr_img_buffer = BytesIO()
+    qr_img.save(qr_img_buffer)
+    qr_img_buffer.seek(0)
+
+    qr_image = qr_img_buffer.getvalue()
+    qr_image = Image(BytesIO(qr_image))
+    qr_image.width = 80
+    qr_image.height = 80
+    content.append(qr_image)
+
+    # Add price
+    price = Paragraph(f'<b>Total Price: ${event.price}</b>', styles['Normal'])
+    content.append(price)
+    content.append(Paragraph("<br/><br/>", styles['Normal']))  # Add spacing
+
+    # Add contact email
+    contact_email = Paragraph(f'<b>Contact Email:</b> {event.contact_email}', styles['Normal'])
+    content.append(contact_email)
 
     doc.build(content)
 
     return response
+
+
+    
+
+  
+
+
+
+
+# views.py
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
+from .models import Blog
+
+class AuthorProfileView(TemplateView):
+    template_name = 'events/author_profile.html'
+
+    def get_context_data(self, **kwargs):
+        author_id = kwargs['author_id']
+        author = get_object_or_404(User, pk=author_id)
+        posts = Blog.objects.filter(author=author)
+        categories = posts.values_list('category', flat=True).distinct()
+        total_posts = posts.count()
+
+        context = {
+            'author': author,
+            'total_posts': total_posts,
+            'categories': categories,
+        }
+        return context
