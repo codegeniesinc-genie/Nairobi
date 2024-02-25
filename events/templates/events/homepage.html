@@ -3,43 +3,67 @@
 {% block content %}
 {% load static %}
 <script src="{% static 'blog.js' %}"></script>
+<link rel="stylesheet" href="{% static 'main.css' %}">
+<header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/events">Events</a>
+        <a href="/blogs">Blog</a>
+        <a href="/policy">Policy</a>
+    </nav>
+</header>
+
+
+
+
+
+
 
 <div class="carousel">
 
     <div class="list">
-        
-        
+
+
         <div class="item">
-            <img src="{% static '1.jpg' %}" alt="Description of the image">
+            <img src="{% static '1-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="author"></div>
                 <div class="title">Who Are We?</div>
                 <div class="topic"></div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    Welcome to Live In Nairobi,
+                    your go-to source for the latest events,
+                    news, and stories in Nairobi and beyond.
+                    We are more than just a media company;
+                    we are a passionate team of individuals
+                    dedicated to capturing and celebrating the
+                    vibrant culture, entertainment, and lifestyle
+                    of this incredible city.
+
                 </div>
 
                 <div class="buttons">
                     <button><a href="/about">About Us</a></button>
                 </div>
             </div>
-            
-
-
         </div>
 
         <div class="item">
-            <img src="{% static '2.jpg' %}" alt="Description of the image">
+            <img src="{% static '2-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="author"></div>
                 <div class="title">Blog</div>
                 <div class="topic"></div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    At Live In Nairobi, we're not just a media company;
+                    we're storytellers, culture enthusiasts,
+                    and your ultimate guide to all things
+                    Nairobi and beyond.From the pulsating
+                    nightlife to the serene corners of its parks,
+                    we're here to celebrate every facet of Nairobi's
+                    rich culture, entertainment, and lifestyle.
+                    Let's start
+                    exploring Nairobi together!
                 </div>
                 <div class="buttons">
                     <button><a href="/blogs">Blog</a></button>
@@ -48,32 +72,38 @@
         </div>
 
         <div class="item">
-            <img src="{% static '3.jpg' %}" alt="Description of the image">
+            <img src="{% static '3-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="author"></div>
                 <div class="title">Events</div>
                 <div class="topic"></div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    Discover all the buzz-worthy
+                    happenings in Nairobi right here!
+                    From concerts to cultural festivals,
+                    we've got the scoop on everything exciting
+                    in the city. Ready to dive in?
+
                 </div>
                 <div class="buttons">
-                    <button><a href="/events">Check Them Out</a></button>
+                    <button><a href="/events">Events</a></button>
                 </div>
             </div>
         </div>
 
         <div class="item">
-            <img src="{% static '4.jpg' %}" alt="Description of the image">
+            <img src="{% static '4-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="author"></div>
                 <div class="title">Privacy Policy</div>
                 <div class="topic"></div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    We value your privacy and want
+                    to ensure clarity in our relationship.
+                    Explore our Privacy Policy to learn how
+                    we handle your data and our Terms & Conditions
+                    for guidelines on using our services.
+                    Let's build trust together!
                 </div>
                 <div class="buttons">
                     <button><a href="/policy">Read More</a></button>
@@ -82,15 +112,17 @@
         </div>
 
         <div class="item">
-            <img src="{% static '5.jpg' %}" alt="Description of the image">
+            <img src="{% static '5-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="author"></div>
-                <div class="title">Contact Us</div>
+                <div class="title">Let's Collaborate!</div>
                 <div class="topic"></div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    Excited about the possibilities?
+                    Whether it's event coverage, promotions,
+                    or event collaboration, we're all ears!
+                    Get in touch and let's make magic happen together.
+                    We can't wait to hear from you!
                 </div>
                 <div class="buttons">
                     <button><a href="/contact">Contact Us</a></button>
@@ -99,37 +131,18 @@
         </div>
 
         <div class="item">
-            <img src="{% static '7.jpg' %}" alt="Description of the image">
+            <img src="{% static '1-min.jpg' %}" alt="Description of the image">
             <div class="content">
-                <div class="author">Siama</div>
-                <div class="title">Design Slider</div>
-                <div class="topic">Events</div>
+                <div class="title">Join Us</div>
                 <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
+                    Are you an event organizer with a vision,
+                    or a talented blog author with stories to share?
+                    We want to hear from you! Let's collaborate and
+                    bring your ideas to life.
                 </div>
                 <div class="buttons">
-                    <button>SEE MORE</button>
-                    <button>SEE MORE</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="item">
-            <img src="{% static '8.jpg' %}" alt="Description of the image">
-            <div class="content">
-                <div class="author">Siama</div>
-                <div class="title">Design Slider</div>
-                <div class="topic">Events</div>
-                <div class="desc">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis qui sit consectetur quibusdam
-                    ratione modi. Impedit aliquam quidem vero error alias omnis, quos possimus, quod delectus nemo,
-                    exercitationem quaerat ea.
-                </div>
-                <div class="buttons">
-                    <button>SEE MORE</button>
-                    <button>SEE MORE</button>
+                    <button><a href="{% url 'events:login' %}" class="btn btn-primary">Sign In</a></button>
+                    <button><a href="{% url 'events:register' %}" class="btn btn-success">Register</a></button>
                 </div>
             </div>
         </div>
@@ -138,79 +151,68 @@
 
     <div class="thumbnail">
         <div class="item">
-            <img src="{% static '1.jpg' %}" alt="Description of the image">
+            <img src="{% static '1-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Who Are We?
                 </div>
                 <div class="desc">
-                    Description
+                    Welcome to Live In Nairobi...
                 </div>
             </div>
         </div>
         <div class="item">
-            <img src="{% static '2.jpg' %}" alt="Description of the image">
+            <img src="{% static '2-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Blog
                 </div>
                 <div class="desc">
-                    Description
+                    At Live In Nairobi...
                 </div>
             </div>
         </div>
         <div class="item">
-            <img src="{% static '3.jpg' %}" alt="Description of the image">
+            <img src="{% static '3-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Events
                 </div>
                 <div class="desc">
-                    Description
+                    Discover all the buzz-worthy...
                 </div>
             </div>
         </div>
         <div class="item">
-            <img src="{% static '4.jpg' %}" alt="Description of the image">
+            <img src="{% static '4-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Privacy Policy
                 </div>
                 <div class="desc">
-                    Description
+                    We value your privacy...
                 </div>
             </div>
         </div>
         <div class="item">
-            <img src="{% static '5.jpg' %}" alt="Description of the image">
+            <img src="{% static '5-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Let's Collaborate!
                 </div>
                 <div class="desc">
-                    Description
+                    Excited about the possibilities?
                 </div>
             </div>
         </div>
         <div class="item">
-            <img src="{% static '7.jpg' %}" alt="Description of the image">
+            <img src="{% static '1-min.jpg' %}" alt="Description of the image">
             <div class="content">
                 <div class="title">
-                    Name Slider
+                    Join Us
                 </div>
                 <div class="desc">
-                    Description
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <img src="{% static '8.jpg' %}" alt="Description of the image">
-            <div class="content">
-                <div class="title">
-                    Name Slider
-                </div>
-                <div class="desc">
-                    Description
+                    Are you an event organizer...
                 </div>
             </div>
         </div>
@@ -223,5 +225,7 @@
     </div>
     <div class="time"></div>
 </div>
+
+
 
 {% endblock %}
