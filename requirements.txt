@@ -2,6 +2,6 @@ asgiref==3.7.2
 Django==5.0.3
 django-bootstrap5==23.4
 django-tinymce==3.6.1
-Pillow==10.1.0
+Pillow==10.3.0
 sqlparse==0.5.0
 tzdata==2023.3
